@@ -18,27 +18,61 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": null,
   "links": [],
   "panels": [
     {
       "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "grafana-azure-monitor-datasource"
       },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "mappings": [],
-          "max": 100,
           "min": 0,
+          "unit": "percent",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": 0
               },
               {
@@ -46,8 +80,7 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "percent"
+          }
         },
         "overrides": []
       },
@@ -57,105 +90,46 @@
         "x": 0,
         "y": 0
       },
-      "id": 2,
+      "id": 1,
       "options": {
-        "displayMode": "gradient",
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "12.2.0",
       "targets": [
         {
           "azureMonitor": {
-            "allowedTimeGrainsMs": [],
-            "timeGrain": "auto"
-          },
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "ff073xe3elgcga"
-          },
-          "dimensions": {},
-          "expression": "",
-          "id": "",
-          "label": "EC2",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "CPUUtilization",
-          "metricQueryType": 0,
-          "namespace": "AWS/EC2",
-          "period": "",
-          "queryLanguage": "CWLI",
-          "queryMode": "Metrics",
-          "queryType": "Azure Monitor",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
-        },
-        {
-          "azureMonitor": {
             "aggregation": "Average",
-            "alias": "Azure VM",
-            "allowedTimeGrainsMs": [
-              60000,
-              300000,
-              900000,
-              1800000,
-              3600000,
-              21600000,
-              43200000,
-              86400000
-            ],
-            "dimensionFilters": [],
             "metricName": "Percentage CPU",
-            "metricNamespace": "microsoft.compute/virtualmachines",
+            "metricNamespace": "Microsoft.Compute/virtualMachines",
             "resources": [
               {
-                "metricNamespace": "Microsoft.Compute/virtualMachines",
-                "subscription": "$subscription",
-                "resourceGroup": "$resourceGroup",
-                "resourceName": "qa-azure-lab-vm"
+                "resourceGroup": "$ResourceGroup",
+                "resourceName": "$VM"
               }
             ],
             "timeGrain": "auto"
           },
-          "datasource": {
-            "type": "grafana-azure-monitor-datasource",
-            "uid": "af06z20ag311cd"
-          },
-          "hide": false,
           "queryType": "Azure Monitor",
-          "refId": "B",
-          "subscription": "$subscription"
+          "refId": "A"
         }
       ],
-      "title": "CPU Utilization",
-      "type": "bargauge"
+      "title": "Azure VM CPU Utilization",
+      "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "grafana-azure-monitor-datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -201,7 +175,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": 0
               },
               {
@@ -212,7 +186,23 @@
           },
           "unit": "percent"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Available Memory Percentage"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -220,7 +210,7 @@
         "x": 12,
         "y": 0
       },
-      "id": 1,
+      "id": 3,
       "options": {
         "legend": {
           "calcs": [],
@@ -237,100 +227,310 @@
       "pluginVersion": "12.2.0",
       "targets": [
         {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "ff073xe3elgcga"
-          },
-          "dimensions": {
-            "InstanceId": "*"
-          },
-          "expression": "",
-          "id": "",
-          "label": "EC2",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "mem_used_percent",
-          "metricQueryType": 0,
-          "namespace": "CWAgent",
-          "period": "",
-          "queryLanguage": "CWLI",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
-        },
-        {
           "azureMonitor": {
             "aggregation": "Average",
-            "alias": "Azure VM",
-            "allowedTimeGrainsMs": [
-              60000,
-              300000,
-              900000,
-              1800000,
-              3600000,
-              21600000,
-              43200000,
-              86400000
-            ],
-            "dimensionFilters": [
-              {
-                "dimension": "",
-                "filters": [],
-                "operator": "eq"
-              }
-            ],
             "metricName": "Available Memory Percentage",
-            "metricNamespace": "microsoft.compute/virtualmachines",
+            "metricNamespace": "Microsoft.Compute/virtualMachines",
             "resources": [
               {
-                "metricNamespace": "Microsoft.Compute/virtualMachines",
-                "subscription": "$subscription",
-                "resourceGroup": "$resourceGroup",
-                "resourceName": "qa-azure-lab-vm"
+                "resourceGroup": "$ResourceGroup",
+                "resourceName": "$VM"
               }
             ],
             "timeGrain": "auto"
           },
-          "datasource": {
-            "type": "grafana-azure-monitor-datasource",
-            "uid": "af06z20ag311cd"
-          },
-          "hide": false,
           "queryType": "Azure Monitor",
-          "refId": "B",
-          "subscription": "$subscription"
+          "refId": "A"
         }
       ],
-      "title": "Memory Utilization",
+      "title": "Azure VM Memory Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "dimensions": {
+            "InstanceId": "$EC2Instance"
+          },
+          "label": "",
+          "metricEditorMode": 0,
+          "metricName": "CPUUtilization",
+          "metricQueryType": 0,
+          "namespace": "AWS/EC2",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "$AWSRegion",
+          "statistic": "Maximum"
+        }
+      ],
+      "title": "EC2 CPU Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mem_used_percent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.2.0",
+      "targets": [
+        {
+          "dimensions": {
+            "InstanceId": "$EC2Instance"
+          },
+          "label": "",
+          "metricEditorMode": 0,
+          "metricName": "mem_used_percent",
+          "metricQueryType": 0,
+          "namespace": "CWAgent",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "$AWSRegion",
+          "statistic": "Maximum"
+        }
+      ],
+      "title": "EC2 Memory Utilization",
       "type": "timeseries"
     }
   ],
   "preload": false,
-  "refresh": "30s",
+  "refresh": "1m",
   "schemaVersion": 42,
   "tags": [
+    "azure",
+    "aws",
+    "multicloud",
     "lab"
   ],
   "templating": {
     "list": [
       {
-        "name": "subscription",
-        "type": "query",
-        "datasource": "af06z20ag311cd",
-        "query": "Subscriptions()",
-        "label": "Subscription",
-        "includeAll": true
+        "datasource": {
+          "type": "grafana-azure-monitor-datasource",
+          "uid": "grafana-azure-monitor-datasource"
+        },
+        "label": "Azure Resource Group",
+        "name": "ResourceGroup",
+        "options": [],
+        "query": "ResourceGroups()",
+        "refresh": 1,
+        "type": "query"
       },
       {
-        "name": "resourceGroup",
-        "type": "query",
-        "datasource": "af06z20ag311cd",
-        "query": "ResourceGroups()",
-        "label": "Resource Group",
-        "includeAll": true
+        "datasource": {
+          "type": "grafana-azure-monitor-datasource",
+          "uid": "grafana-azure-monitor-datasource"
+        },
+        "label": "Azure VM",
+        "name": "VM",
+        "options": [],
+        "query": "ResourceNames($ResourceGroup,Microsoft.Compute/virtualMachines)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "default",
+          "value": "default"
+        },
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "cloudwatch"
+        },
+        "label": "AWS Region",
+        "name": "AWSRegion",
+        "options": [],
+        "query": "regions()",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "cloudwatch"
+        },
+        "label": "EC2 Instance",
+        "name": "EC2Instance",
+        "options": [],
+        "query": "ec2_instance_attribute($AWSRegion, InstanceId, {\"instance-state-name\": \"running\"})",
+        "refresh":  2,
+        "multi": false,
+        "includeAll": false,
+        "type": "query"
       }
     ]
   },
@@ -338,9 +538,7 @@
     "from": "now-30m",
     "to": "now"
   },
-  "timepicker": {},
   "timezone": "",
   "title": "Multicloud Compute",
-  "uid": "17e5844e-d593-4a92-8d52-ea857bad39f6",
-  "version": 5
+  "version": 1
 }
